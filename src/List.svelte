@@ -57,7 +57,6 @@
   });
 
   beforeUpdate(() => {
-
     if (items !== prev_items && items.length > 0) {
       hoverItemIndex = 0;
     }
@@ -102,8 +101,14 @@
   function handleClick(args) {
     const { item, i, event } = args;
     event.stopPropagation();
-
     if (selectedValue && !isMulti && selectedValue[optionIdentifier] === item[optionIdentifier]) return closeList();
+    if (selectedValue && isMulti) {
+      if (selectedValue.filter(value => (value[optionIdentifier] === item[optionIdentifier])).length > 0) {
+
+      } else {
+
+      }
+    }
 
     if (item.isCreator) {
       dispatch('itemCreated', filterText);
@@ -192,7 +197,11 @@
   }
 
   function isItemActive(item, selectedValue, optionIdentifier) {
-    return selectedValue && (selectedValue[optionIdentifier] === item[optionIdentifier]);
+    if (!isMulti) {
+      return selectedValue && (selectedValue[optionIdentifier] === item[optionIdentifier]);
+    } else {
+      return selectedValue && selectedValue.filter(value => (value[optionIdentifier] === item[optionIdentifier])).length > 0;
+    }
   };
 
   function isItemFirst(itemIndex) {
@@ -209,10 +218,9 @@
 
 {#if isVirtualList}
 <div class="listContainer virtualList" bind:this={container}>
-
   <VirtualList {items} {itemHeight} let:item let:i>
   
-    <div on:mouseover="{() => handleHover(i)}" on:click="{event => handleClick({item, i, event})}"
+    <div on:mouseover="{() => handleHover(i)}" on:click="{event => handleClick({ item, i, event })}"
         class="listItem">
           <svelte:component 
             this="{Item}"
@@ -236,11 +244,11 @@
       <div class="listGroupTitle">{getGroupHeaderLabel(item)}</div>
     { :else }
     <div 
-      on:mouseover="{() => handleHover(i)}" 
+      on:mouseover="{() => handleHover(i)}"
       on:click="{event => handleClick({item, i, event})}"
       class="listItem"
     >
-      <svelte:component 
+      <svelte:component
         this="{Item}"
         {item}
         {filterText}

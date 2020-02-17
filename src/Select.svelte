@@ -45,7 +45,6 @@
       label: groupValue
     }
   };
-
   export let createItem = (filterText) => {
     return {
       value: filterText,
@@ -150,11 +149,11 @@
 
         let keepItem = true;
 
-        if (isMulti && selectedValue) {
-          keepItem = !selectedValue.find((value) => {
-            return value[optionIdentifier] === item[optionIdentifier]
-          });
-        }
+        // if (isMulti && selectedValue) {
+        //   keepItem = !selectedValue.find((value) => {
+        //     return value[optionIdentifier] === item[optionIdentifier]
+        //   });
+        // }
 
         if (!keepItem) return false;
         if (filterText.length < 1) return true;
@@ -262,7 +261,6 @@
 
     if (prev_filteredItems !== filteredItems) {
       let _filteredItems = [...filteredItems];
-
       if (isCreatable && filterText) {
         const itemToCreate = createItem(filterText);
         itemToCreate.isCreator = true;
@@ -337,7 +335,7 @@
     }
 
     dispatch('clear', itemToRemove);
-    
+
     getPosition();
   }
 
@@ -419,7 +417,7 @@
   }
 
   function removeList() {
-    resetFilter();
+    // resetFilter();
     activeSelectedValue = undefined;
 
     if (!list) return;
@@ -459,7 +457,8 @@
 
   async function loadList() {
     await tick();
-    if (target && list) return;
+    // if (target && list) return;
+    if (target && list) removeList();
 
     const data = {
       Item,
@@ -490,7 +489,6 @@
     list = list;
     target = target;
     if (container) container.appendChild(target);
-
     list = new List({
       target,
       props: data
@@ -498,24 +496,36 @@
 
     list.$on('itemSelected', (event) => {
       const { detail } = event;
-
       if (detail) {
         const item = Object.assign({}, detail);
-
         if (isMulti) {
-          selectedValue = selectedValue ? selectedValue.concat([item]) : [item];
+          const existingIndex = selectedValue ? selectedValue.findIndex(selItem => selItem.value === item.value) : -1;
+          if (existingIndex === -1) {
+            selectedValue = selectedValue ? selectedValue.concat([item]) : [item];
+          } else {
+            selectedValue.splice(existingIndex, 1);
+            dispatch('clear');
+          }
         } else {
           selectedValue = item;
         }
 
+        // if (isMulti) {
+        //   selectedValue = selectedValue ? selectedValue : [item];
+        // } else {
+        //   selectedValue = item;
+        // }
+
         resetFilter();
         selectedValue = selectedValue;
-
         setTimeout(() => {
-          listOpen = false;
+          if (!isMulti) {
+            listOpen = false;
+          }
           activeSelectedValue = undefined;
         });
       }
+      loadList();
     });
 
     list.$on('itemCreated', (event) => {
@@ -583,7 +593,7 @@
     on:multiItemClear="{handleMultiItemClear}"
     on:focus="{handleFocus}"
   />
-  {/if}
+  {/if} <!-- !!! -->
 
 
   {#if isDisabled}
@@ -707,10 +717,11 @@
 
   .clearSelect {
     position: absolute;
-    right: var(--clearSelectRight, 10px);
-    top: var(--clearSelectTop, 11px);
-    bottom: var(--clearSelectBottom, 11px);
-    width: var(--clearSelectWidth, 20px);
+    right: var(--clearSelectRight, 8px);
+    top: var(--clearSelectTop, 7px);
+    bottom: var(--clearSelectBottom, 20px);
+    width: var(--clearSelectWidth, 15px);
+    height: 15px;
     color: var(--clearSelectColor, #c5cacf);
     flex: none !important;
   }
@@ -772,8 +783,8 @@
   .multiSelect {
     display: flex;
     padding: var(--multiSelectPadding, 0 35px 0 16px);
-    height: auto;
-    flex-wrap: wrap;
+    /*height: auto;*/
+    flex-wrap: nowrap;
   }
 
   .multiSelect > * {

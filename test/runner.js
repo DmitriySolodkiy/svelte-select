@@ -5,7 +5,6 @@ const puppeteer = require('puppeteer');
 let page;
 
 async function go() {
-  console.log('go');
   const port = await ports.find(1234);
   console.log(`found available port: ${port}`);
 
