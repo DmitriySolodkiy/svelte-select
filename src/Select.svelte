@@ -67,7 +67,7 @@
   export let inputAttributes = {};
   export let listAutoWidth = true;
   export let itemHeight = 40;
-  
+
 
   let target;
   let activeSelectedValue;
@@ -87,9 +87,9 @@
 
   const getItems = debounce(async () => {
     isWaiting = true;
-    
+
     items = await loadOptions(filterText);
-  
+
     isWaiting = false;
     isFocused = true;
     listOpen = true;
@@ -174,16 +174,16 @@
 
           if(groupValue) {
             groups[groupValue].push(Object.assign(
-              createGroupHeaderItem(groupValue, item), 
-              { 
-                id: groupValue, 
-                isGroupHeader: true, 
+              createGroupHeaderItem(groupValue, item),
+              {
+                id: groupValue,
+                isGroupHeader: true,
                 isSelectable: isGroupHeaderSelectable
               }
             ));
           }
         }
-        
+
         groups[groupValue].push(Object.assign({ isGroupItem: !!groupValue }, item));
       });
 
@@ -542,11 +542,11 @@
       activeSelectedValue = undefined;
       resetFilter();
     });
-    
+
     list.$on('closeList', () => {
       listOpen = false;
     });
-  
+
     list = list,
     target = target;
     getPosition();
@@ -588,12 +588,10 @@
     this="{MultiSelection}"
     {selectedValue}
     {getSelectionLabel}
-    {activeSelectedValue}
-    {isDisabled}
     on:multiItemClear="{handleMultiItemClear}"
     on:focus="{handleFocus}"
   />
-  {/if} <!-- !!! -->
+  {/if}
 
 
   {#if isDisabled}
@@ -601,7 +599,7 @@
       {..._inputAttributes}
       bind:this={input}
       on:focus="{handleFocus}"
-      bind:value="{filterText}"    
+      bind:value="{filterText}"
       placeholder="{placeholderText}"
       style="{inputStyles}"
       disabled
@@ -611,7 +609,7 @@
       {..._inputAttributes}
       bind:this={input}
       on:focus="{handleFocus}"
-      bind:value="{filterText}"    
+      bind:value="{filterText}"
       placeholder="{placeholderText}"
       style="{inputStyles}"
     >
