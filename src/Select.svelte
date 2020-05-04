@@ -781,7 +781,6 @@
   .multiSelect {
     display: flex;
     padding: var(--multiSelectPadding, 0 35px 0 16px);
-    /*height: auto;*/
     flex-wrap: nowrap;
   }
 
@@ -790,6 +789,7 @@
   }
 
   .selectContainer.multiSelect input {
+    flex: 1 0;
     padding: var(--multiSelectInputPadding, 0);
     position: relative;
     margin: var(--multiSelectInputMargin, 0);

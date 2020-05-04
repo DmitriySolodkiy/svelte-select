@@ -27,6 +27,6 @@
     padding-top: 5px;
     color: #000000;
     text-overflow: ellipsis;
-    width: var(--multiItemsWidth, inherit);
+    flex: 4 0;
   }
 </style>
