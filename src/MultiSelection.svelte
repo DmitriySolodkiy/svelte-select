@@ -27,6 +27,6 @@
     padding-top: 5px;
     color: #000000;
     text-overflow: ellipsis;
-    width: var(--multiItemsWidth, 340px);
+    width: var(--multiItemsWidth, inherit);
   }
 </style>
